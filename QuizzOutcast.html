@@ -1,0 +1,665 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Which Outcast Species Are You?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Link to the separate fonts CSS file -->
+    <link rel="stylesheet" href="fonts.css">
+    <style>
+        body {
+            /* Apply Typewriter Condensed as the base font */
+            font-family: 'Typewriter Condensed', 'Inter', sans-serif;
+            overflow: hidden; /* Prevent scrollbars caused by video */
+            font-size: 1.15rem; /* Increased base font size by 15% */
+            line-height: 1.5; /* Adjust line height for readability */
+        }
+        .font-quotex {
+             /* Apply Quotex font */
+            font-family: 'Quotex', 'Spectral', serif;
+        }
+        .font-nocturne {
+            /* Apply Nocturne Serif font */
+            font-family: 'Nocturne Serif', 'Spectral', serif;
+        }
+
+        /* Video Background Styles */
+        #background-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -100; /* Place it behind everything */
+            background-size: cover;
+            filter: brightness(0.4); /* Darken the video slightly */
+        }
+
+        /* Custom scrollbar for a more gothic feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a202c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #718096;
+        }
+        .question-card, .result-card, .tie-card {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background-color: rgba(31, 41, 55, 0.7); /* Adjust alpha for better readability over video */
+        }
+        /* Intro Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        .animation-delay-300 {
+            animation-delay: 300ms;
+        }
+        .animation-delay-600 {
+            animation-delay: 600ms;
+        }
+        /* Custom styles for the new purple color */
+        .bg-custom-purple { background-color: #5b108b; }
+        .hover\:bg-custom-purple-dark:hover { background-color: #490d70; } /* Slightly darker shade for hover */
+        .text-custom-purple-light { color: #a46edb; } /* Lighter shade for text */
+        .text-custom-purple { color: #5b108b; }
+        .decoration-custom-purple { text-decoration-color: #5b108b; }
+
+    </style></head><body class="bg-gray-900 text-gray-200 min-h-screen flex items-center justify-center p-4 transition-all duration-500">
+
+    <!-- Background Video -->
+    <video autoplay loop muted id="background-video">
+        <source src="BGQuizzWed.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div id="quiz-container" class="w-full max-w-2xl mx-auto relative z-10"> <!-- Ensure quiz content is above video -->
+        
+        <!-- Start Screen --><div id="start-screen" class="text-center">
+            <!-- Use font-quotex for the main title, increased size -->
+            <h1 class="font-quotex text-5xl md:text-6xl font-bold mb-4 text-white opacity-0 animate-fade-in-up">Which Nevermore Outcast Are You?</h1>
+             <!-- Increased font size, adjusted padding/margin if needed to keep on one line -->
+            <p class="text-xl text-gray-400 mb-10 opacity-0 animate-fade-in-up animation-delay-300 px-4">Your powers are a mirror of your inner self. Answer the questions to reveal the truth.</p>
+            <!-- Updated button color, increased font size -->
+            <button id="start-btn" class="bg-custom-purple hover:bg-custom-purple-dark text-white font-bold py-3 px-8 rounded-lg text-xl transition-transform transform hover:scale-105 shadow-lg opacity-0 animate-fade-in-up animation-delay-600">Begin the Diagnosis</button>
+        </div>
+
+        <!-- Quiz Screen --><div id="quiz-screen" class="hidden">
+            <div id="question-card" class="question-card border border-gray-700 rounded-xl shadow-2xl p-6 md:p-8">
+                 <!-- Increased font size -->
+                <p id="question-counter" class="text-base text-custom-purple-light mb-2 font-semibold"></p>
+                 <!-- Increased font size -->
+                <h2 id="question-text" class="text-3xl font-bold mb-6 text-white"></h2>
+                <div id="answer-buttons" class="grid grid-cols-1 gap-4">
+                    <!-- Answer buttons will be inserted here --></div>
+            </div>
+        </div>
+        
+        <!-- Tie Screen --><div id="tie-screen" class="hidden">
+            <div class="tie-card border border-gray-700 rounded-xl shadow-2xl p-6 md:p-8 text-center">
+                 <!-- Use font-quotex for the tie screen title, increased size -->
+                <h2 class="font-quotex text-4xl md:text-5xl font-bold mb-4 text-white">Your Affinity is Split</h2>
+                 <!-- Increased font size -->
+                <p class="text-xl text-gray-400 mb-8">Your answers point to multiple paths. Choose the one that calls to you.</p>
+                <div id="tie-buttons" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Tie buttons will be inserted here --></div>
+            </div>
+        </div>
+
+        <!-- Result Screen --><div id="result-screen" class="hidden">
+            <div class="result-card border border-gray-700 rounded-xl shadow-2xl p-6 md:p-8 text-center">
+                <!-- Increased font size, updated color -->
+                <p class="text-custom-purple-light font-semibold mb-2 text-lg">Your Outcast Profile:</p>
+                 <!-- Use font-quotex for the main result title, increased size -->
+                <h2 id="result-title" class="font-quotex text-5xl md:text-6xl font-bold mb-4 text-white"></h2>
+                 <!-- Increased font size -->
+                <div id="result-icon" class="text-7xl my-6"></div>
+                 <!-- Increased font size -->
+                <p id="result-description" class="text-gray-300 text-lg md:text-xl mb-8 leading-relaxed"></p>
+                
+                <div id="sub-result-container" class="mt-8 border-t border-gray-700 pt-8">
+                    <!-- Increased font size, updated color -->
+                    <p class="text-custom-purple-light font-semibold mb-2 text-lg">Your Secondary Affinity:</p>
+                    <!-- Use font-nocturne for the secondary result title, increased size -->
+                    <h3 id="sub-result-title" class="font-nocturne text-3xl font-bold text-white"></h3>
+                </div>
+
+                <div class="my-10">
+                    <!-- Increased font size, updated color -->
+                    <h3 class="text-2xl font-semibold text-custom-purple-light mb-4">Your Affinity Analysis</h3>
+                    <div class="w-full max-w-md mx-auto h-72 md:h-96"> <!-- Increased height slightly -->
+                         <canvas id="result-chart"></canvas>
+                    </div>
+                </div>
+                <!-- Increased font size -->
+                <button id="restart-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg text-xl transition-transform transform hover:scale-105 shadow-lg">Try Again</button>
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- Custom Tooltip --><div id="tooltip" class="hidden absolute bg-gray-800 text-white text-base rounded-lg p-3 max-w-xs z-50 pointer-events-none shadow-lg leading-relaxed"></div> <!-- Increased text size -->
+
+    <script>
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const tieScreen = document.getElementById('tie-screen');
+        const resultScreen = document.getElementById('result-screen');
+        
+        const questionCounterEl = document.getElementById('question-counter');
+        const questionTextEl = document.getElementById('question-text');
+        const answerButtonsEl = document.getElementById('answer-buttons');
+        
+        const resultTitleEl = document.getElementById('result-title');
+        const resultIconEl = document.getElementById('result-icon');
+        const resultDescriptionEl = document.getElementById('result-description');
+        const subResultContainer = document.getElementById('sub-result-container');
+        const subResultTitleEl = document.getElementById('sub-result-title');
+        const resultChartEl = document.getElementById('result-chart');
+        const tooltip = document.getElementById('tooltip');
+
+        let currentQuestionIndex = 0;
+        let scores = {};
+        let resultChart = null;
+
+        const newPurpleColor = '#5b108b';
+        const newPurpleHoverColor = '#490d70'; // Slightly darker for hover
+        const newPurpleLightColor = '#a46edb'; // Lighter shade for text/accents
+
+        const questions = [
+             {
+                question: "You're given a glimpse of the future. What do you see?",
+                answers: [
+                    { text: "A grim, inevitable outcome. It's best to be prepared for the worst.", species: "Raven" },
+                    { text: "A bright possibility. There's always hope, even if it's faint.", species: "Dove" },
+                    { text: "A chaotic series of events. I'll need my friends to navigate it.", species: "Werewolf" },
+                    { text: "An opportunity to shift things in my favor.", species: "Siren" },
+                    { text: "A glimpse of a brilliant new invention, fully formed in my mind.", species: "DaVinci" }
+                ]
+            },
+            {
+                question: "How do you handle social gatherings?",
+                answers: [
+                    { text: "I find a quiet corner and observe everyone's behavior.", species: "Shapeshifter" },
+                    { text: "I stick to my small, trusted group. Safety in numbers.", species: "Werewolf" },
+                    { text: "I avoid eye contact and keep to myself to prevent... complications.", species: "Gorgon" },
+                    { text: "I prefer to stay home. People are exhausting.", species: "Vampire" },
+                    { text: "I feel a constant urge to break free from the noise and unleash my true self.", species: "Alpha" }
+                ]
+            },
+            {
+                question: "Someone has deeply betrayed you. Your first instinct is to:",
+                answers: [
+                    { text: "Retreat and analyze. Their motives are more interesting than my anger.", species: "Raven" },
+                    { text: "Unleash a part of myself they never knew existed. They will regret it.", species: "Hyde" },
+                    { text: "Cut them off. My circle is built on loyalty, and they broke the code.", species: "Werewolf" },
+                    { text: "Use their weakness against them, subtly turning their world upside down.", species: "Siren" },
+                    { text: "Feel the hum of the world around me, asking my unseen allies for insight.", species: "Swarmer" }
+                ]
+            },
+            {
+                question: "What is your relationship with your family's expectations?",
+                answers: [
+                    { text: "They've set a path for me, but I feel like I'm destined for something different, something more.", species: "Alpha" },
+                    { text: "I feel immense pressure to live up to their legacy.", species: "Werewolf" },
+                    { text: "I respect their guidance, but my path is my own to forge.", species: "Dove" },
+                    { text: "Their expectations are irrelevant. I operate on my own terms.", species: "Raven" },
+                    { text: "I feel the weight of their secrets, a history passed down through touch and whispers.", species: "Psychic" }
+                ]
+            },
+            {
+                question: "You're faced with a complex problem. How do you solve it?",
+                answers: [
+                    { text: "Through intense, focused creativity. I'll build or design a solution.", species: "DaVinci" },
+                    { text: "I consult the wisdom of those who came before me.", species: "Psychic" },
+                    { text: "I rally a group to tackle it head-on.", species: "Siren" },
+                    { text: "I find an unconventional ally others might overlook.", species: "Swarmer" },
+                    { text: "I must suppress my first, more violent, instinct and think carefully.", species: "Hyde" }
+                ]
+            },
+            {
+                question: "Your personal space is:",
+                answers: [
+                    { text: "A dark, comfortable sanctuary where I can recharge away from the world.", species: "Vampire" },
+                    { text: "A creative, chaotic mess filled with my ongoing projects.", species: "DaVinci" },
+                    { text: "Wherever my pack is. Home is about people, not places.", species: "Gorgon" }, // Altered from Werewolf
+                    { text: "Minimalist. I don't get attached to things or places.", species: "Shapeshifter" },
+                    { text: "Filled with hope and light, a place that encourages growth.", species: "Dove" }
+                ]
+            },
+            {
+                question: "How do you feel about your own deepest emotions?",
+                answers: [
+                    { text: "They are a dangerous liability. I keep them locked away.", species: "Hyde" },
+                    { text: "They are a source of strength, especially when protecting others.", species: "Werewolf" },
+                    { text: "They are a tool to be understood and, when necessary, used.", species: "Siren" },
+                    { text: "They are a constant storm that risks consuming me if I'm not careful.", species: "Raven" },
+                    { text: "They are an ancient force I am bound to by blood and tradition.", species: "Vampire" }
+                ]
+            },
+            {
+                question: "You must blend in with 'normies'. Your strategy is:",
+                answers: [
+                    { text: "Become a perfect mirror of whoever I'm with. They'll never know.", species: "Shapeshifter" },
+                    { text: "Just be quiet and wear a hat. It's a surprisingly effective disguise.", species: "Gorgon" },
+                    { text: "I don't. Blending in is a form of surrender.", species: "Alpha" }, // Altered from Raven
+                    { text: "Charm them. A little charisma makes everyone lower their guard.", species: "Siren" },
+                    { text: "I listen to their thoughts, giving them the answers they want to hear.", species: "Psychic" }
+                ]
+            },
+            {
+                question: "Your greatest fear is:",
+                answers: [
+                    { text: "Losing control and hurting someone I care about.", species: "Hyde" },
+                    { text: "Being ostracized and left completely alone.", species: "Werewolf" },
+                    { text: "My own potential. The power inside me could lead to madness.", species: "DaVinci" },
+                    { text: "Never knowing if people's feelings for me are real.", species: "Siren" },
+                    { text: "Seeing a terrible future but being unable to convince anyone to change it.", species: "Raven" }
+                ]
+            },
+            {
+                question: "Choose a companion for a quiet afternoon:",
+                answers: [
+                    { text: "The company of bees in a garden.", species: "Swarmer" },
+                    { text: "The ghosts of my ancestors.", species: "Psychic" },
+                    { text: "A good book in a dimly lit room.", species: "Vampire" },
+                    { text: "No one. Solitude is where I think most clearly.", species: "DaVinci" }, // Altered from Raven
+                    { text: "My pack. Quiet time is still better together.", species: "Werewolf" }
+                ]
+            },
+            {
+                question: "When you look in a mirror, you see:",
+                answers: [
+                    { text: "A stranger I don't fully recognize.", species: "Hyde" },
+                    { text: "A momentary reflection before I quickly look away. It's safer.", species: "Gorgon" },
+                    { text: "Just one of many faces I can wear.", species: "Shapeshifter" },
+                    { text: "A reflection of my family's legacy, for better or worse.", species: "Vampire" }, // Altered from Werewolf
+                    { text: "A flicker of a possible future, and it isn't always good.", species: "Raven" }
+                ]
+            },
+            {
+                question: "Power is...",
+                answers: [
+                    { text: "... a burden that isolates you from others.", species: "Psychic" }, // Altered from Raven
+                    { text: "... a responsibility to lead and influence.", species: "Siren" },
+                    { text: "... a dangerous force that must be controlled at all costs.", species: "Hyde" },
+                    { text: "... most effective when no one knows you have it.", species: "Shapeshifter" },
+                    { text: "... the freedom to not be ruled by anyone else's expectations.", species: "Alpha" }
+                ]
+            },
+            {
+                question: "Your preferred method of communication is:",
+                answers: [
+                    { text: "Direct, blunt, and devoid of emotion.", species: "Raven" },
+                    { text: "Persuasive and tailored to my audience.", species: "Siren" },
+                    { text: "Non-verbal. My actions speak for me.", species: "Gorgon" },
+                    { text: "I prefer to listen. I learn more that way.", species: "Shapeshifter" },
+                    { text: "Inspirational. I speak to bring out the best in others.", species: "Dove" }
+                ]
+            },
+            {
+                question: "You find an old, forgotten diary. You:",
+                answers: [
+                    { text: "Touch it, hoping for a psychic echo of its owner's past.", species: "Psychic" },
+                    { text: "Analyze it for secrets and leverage they might provide.", species: "Raven" }, // Altered from Siren
+                    { text: "Leave it. Some secrets are best left buried.", species: "Gorgon" },
+                    { text: "See it as a puzzle, a complex system of thoughts to decode.", species: "DaVinci" },
+                    { text: "Hope it contains a story of redemption and hope.", species: "Dove" }
+                ]
+            },
+            {
+                question: "A friend is in danger. You:",
+                answers: [
+                    { text: "Transform into whatever is necessary to protect them, no matter the cost.", species: "Alpha" },
+                    { text: "Rally my other friends. We're stronger together.", species: "Werewolf" },
+                    { text: "Tap into a frightening inner strength I keep hidden.", species: "Hyde" },
+                    { text: "Use my unique, and perhaps strange, talents to create a diversion.", species: "Swarmer" },
+                    { text: "Invent a device on the fly to get them out of trouble.", species: "DaVinci" }
+                ]
+            }
+        ];
+        
+        const results = {
+             Raven: {
+                title: "Raven Psychic",
+                icon: "🐦‍⬛",
+                description: "You see the world for what it is: a landscape of dark truths and grim possibilities. Your visions are potent and often violent, a reflection of your cynical worldview. This gift is a heavy burden, isolating you and threatening your sanity without proper control. You walk a lonely path, guided by ancient spirits, your personality both the cause and consequence of your powerful, dark gift."
+            },
+            Dove: {
+                title: "Dove Psychic",
+                icon: "🕊️",
+                description: "You are a vessel for lighter, more hopeful visions. Your power stems from an optimistic worldview, filtering your psychic perceptions toward positive outcomes. While your abilities may not be as raw or violent as a Raven's, you possess a formidable gift for seeing the good. You understand that psychic power is a mirror of the self, and yours reflects hope."
+            },
+            Werewolf: {
+                title: "Werewolf",
+                icon: "🐺",
+                description: "Loyalty, pack, and social pressure define your existence. Your power is tied to the moon and, more importantly, to your emotions. You feel a deep need to belong and protect your own. Whether you're a 'late bloomer' or the heart of the pack, your strength truly awakens not by celestial cycles, but by your fierce devotion to those you call family."
+            },
+            Siren: {
+                title: "Siren",
+                icon: "🎶",
+                description: "You are a natural leader, possessing a power of persuasion that makes you socially dominant and influential. Your 'siren song' can sway emotions and compel action, placing you at the top of any hierarchy. However, this gift is a cage; it breeds distrust and makes genuine connection difficult. You constantly negotiate between your true self and the powerful manipulator others fear you to be."
+            },
+            Gorgon: {
+                title: "Gorgon",
+                icon: "🐍",
+                description: "Your power is a constant hazard, forcing you into a life of caution and withdrawal. You've adopted a laid-back, non-confrontational persona as a necessary coping mechanism. Taught from a young age to avoid engagement, your social identity is a direct adaptation to your biology. You know that a single glance—either at others or at yourself—can be."
+            },
+            Vampire: {
+                title: "Vampire",
+                icon: "🦇",
+                description: "You are an aloof and enigmatic soul with an air of gothic aristocracy. Rooted in ancient tradition, you prefer the shadows to the spotlight. You are photosensitive but not destroyed by the sun, moving through the world on your own terms and on your own time. You keep to yourself, an understated but permanent fixture in any social ecosystem, content in your longevity."
+            },
+            Hyde: {
+                title: "Hyde",
+                icon: "🧪",
+                description: "You harbor a monstrous, primal alter ego, born of mutation and trauma. This dormant side can be unlocked by an external force, leaving you psychologically bound to a 'master' or a past event. You possess terrifying physical power, but it's a weapon forged from your own pain and rage. You walk the tragic line between victim and perpetrator, your greatest battle being with the monster within."
+            },
+            Shapeshifter: {
+                title: "Shapeshifter",
+                icon: "🎭",
+                description: "You are a master of adaptation and observation. Your power allows you to assume the form of anyone, a perfect mimicry of voice, appearance, and clothing. This makes you invaluable for espionage and secrecy, but it can leave you with a fragile sense of your own core identity. You are most comfortable when you are someone else, a mystery even to yourself."
+            },
+            Swarmer: {
+                title: "Swarmer / Avian",
+                icon: "🐝",
+                description: "You have a unique connection to the natural world, able to mentally communicate with and command legions of creatures others ignore. Your power is contingent on your environment, making you seem unassuming in one place and overwhelmingly powerful in another. You often prefer the company of your non-human allies to people, wielding a subtle but formidable influence over the world."
+            },
+            DaVinci: {
+                title: "DaVinci",
+                icon: "✍️",
+                description: "You are a fascinating blend of telekinesis and artistic genius. You move the world with your mind, but this ability is intrinsically linked to your heightened creativity and intellect. You are an inventor, a creator, a 'mad genius'. This profound power comes with a great risk: the potential for it to overwhelm your psyche and drive you to insanity. Your mind is both your greatest tool and your most fragile asset."
+            },
+            Psychic: {
+                 title: "Psychic",
+                 icon: "🔮",
+                 description: "You are a seer, gifted with visions of the past, present, and future. Your power is deeply personal and often involuntary, triggered by touch. This makes you powerful, but also potentially unstable. You must seek guidance from spirits, as your journey to mastery is a solitary one. Your greatest challenge is not just controlling your power, but mastering your own psyche."
+            },
+            Alpha: {
+                title: "Alpha Werewolf",
+                icon: "🌕",
+                description: "You are a rare and powerful anomaly. Your werewolf abilities are greatly enhanced, and you are liberated from the lunar cycle, able to transform at will. But this power is a terrifying curse. You are feared as a 'loose cannon' by your own kind, and a single transformation under the full moon could trap you in wolf form forever, making you an outlaw to be hunted by your former pack."
+            }
+        };
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            scores = { Raven: 0, Dove: 0, Werewolf: 0, Siren: 0, Gorgon: 0, Vampire: 0, Hyde: 0, Shapeshifter: 0, Swarmer: 0, DaVinci: 0, Psychic: 0, Alpha: 0 };
+            startScreen.classList.add('hidden');
+            tieScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            if(resultChart){
+                resultChart.destroy();
+            }
+            showQuestion();
+        }
+
+        function showQuestion() {
+            resetState();
+            const question = questions[currentQuestionIndex];
+            questionCounterEl.innerText = `Question ${currentQuestionIndex + 1} / ${questions.length}`;
+            questionTextEl.innerText = question.question;
+            question.answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.innerText = answer.text;
+                 // Increased font size, updated hover color
+                button.classList.add('bg-gray-700', 'hover:bg-custom-purple', 'text-white', 'font-semibold', 'py-3', 'px-4', 'rounded-lg', 'text-left', 'transition-all', 'duration-200', 'transform', 'hover:scale-102', 'text-lg'); 
+                button.addEventListener('click', () => selectAnswer(answer.species));
+                answerButtonsEl.appendChild(button);
+            });
+        }
+        
+        function resetState() {
+            while (answerButtonsEl.firstChild) {
+                answerButtonsEl.removeChild(answerButtonsEl.firstChild);
+            }
+        }
+
+        function selectAnswer(species) {
+            scores[species]++;
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            const scoresArray = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            const maxScore = scoresArray[0][1];
+            const tiedWinners = scoresArray.filter(item => item[1] === maxScore);
+
+            if (tiedWinners.length > 1) {
+                showTieScreen(tiedWinners, scoresArray);
+            } else {
+                const winnerSpecies = scoresArray[0][0];
+                displayFinalResult(winnerSpecies, scoresArray);
+            }
+        }
+
+        function showTieScreen(tiedWinners, scoresArray) {
+            const tieButtonsEl = document.getElementById('tie-buttons');
+            tieButtonsEl.innerHTML = ''; 
+
+            tiedWinners.forEach(winner => {
+                const speciesKey = winner[0];
+                const resultData = results[speciesKey];
+                const button = document.createElement('button');
+                 // Updated hover color, increased font size
+                button.classList.add('bg-gray-700', 'hover:bg-custom-purple', 'text-white', 'font-semibold', 'py-4', 'px-4', 'rounded-lg', 'text-center', 'transition-all', 'duration-200', 'transform', 'hover:scale-105', 'text-lg'); 
+                
+                button.innerHTML = `
+                    <div class="text-5xl mb-2">${resultData.icon}</div> 
+                    <div class="font-quotex text-2xl">${resultData.title}</div>
+                `;
+                
+                button.addEventListener('click', () => {
+                    displayFinalResult(speciesKey, scoresArray);
+                });
+                tieButtonsEl.appendChild(button);
+            });
+
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            tieScreen.classList.remove('hidden');
+        }
+
+        function displayFinalResult(chosenSpecies, scoresArray) {
+            const resultData = results[chosenSpecies];
+            resultTitleEl.innerText = resultData.title;
+            resultIconEl.innerText = resultData.icon;
+            resultDescriptionEl.innerText = resultData.description;
+
+            // --- REVISED LOGIC FOR SUB-AFFINITY ---
+            const maxScore = scoresArray[0][1];
+            const allWinners = scoresArray.filter(item => item[1] === maxScore);
+
+            const unchosenWinners = allWinners.filter(item => item[0] !== chosenSpecies);
+            const remainingScores = scoresArray.filter(item => item[1] < maxScore);
+
+            let secondaryAffinities = [];
+            if (unchosenWinners.length > 0) {
+                secondaryAffinities = unchosenWinners;
+            } else if (remainingScores.length > 0) {
+                const secondPlaceScore = remainingScores[0][1];
+                secondaryAffinities = remainingScores.filter(item => item[1] === secondPlaceScore);
+            }
+
+            subResultTitleEl.innerHTML = ''; 
+            
+            const finalSecondary = secondaryAffinities.filter(item => item[1] >= 3);
+
+            if (finalSecondary.length > 0) {
+                finalSecondary.forEach((sub, index) => {
+                    const subSpeciesKey = sub[0];
+                    const subResultData = results[subSpeciesKey];
+                    
+                    const span = document.createElement('span');
+                    span.innerText = subResultData.title;
+                    span.style.cursor = 'help';
+                     // Updated decoration color
+                    span.classList.add('underline', 'decoration-dotted', 'decoration-custom-purple');
+
+                    span.addEventListener('mousemove', (e) => {
+                        tooltip.innerHTML = subResultData.description;
+                        tooltip.style.left = `${e.pageX + 15}px`;
+                        tooltip.style.top = `${e.pageY + 15}px`;
+                        tooltip.classList.remove('hidden');
+                    });
+                    span.addEventListener('mouseout', () => {
+                        tooltip.classList.add('hidden');
+                    });
+
+                    subResultTitleEl.appendChild(span);
+
+                    if (index < finalSecondary.length - 1) {
+                        subResultTitleEl.appendChild(document.createTextNode(', '));
+                    }
+                });
+
+                const subResultLabel = subResultContainer.querySelector('p');
+                subResultLabel.innerText = finalSecondary.length > 1 ? 'Your Secondary Affinities:' : 'Your Secondary Affinity:';
+                
+                subResultContainer.classList.remove('hidden');
+            } else {
+                subResultContainer.classList.add('hidden');
+            }
+
+            quizScreen.classList.add('hidden');
+            tieScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            
+            createRadarChart();
+        }
+
+        function createRadarChart() {
+            // Apply Typewriter Condensed to chart labels, increase size
+            Chart.defaults.font.family = "'Typewriter Condensed', 'Inter', sans-serif";
+            Chart.defaults.font.size = 14; // Increased default font size slightly
+            const chartLabels = Object.keys(scores).map(species => results[species].title);
+            
+            function wrapText(text, maxWidth) {
+                const words = text.split(' ');
+                let lines = [];
+                let currentLine = words[0];
+
+                for (let i = 1; i < words.length; i++) {
+                    const word = words[i];
+                    if (currentLine.length + word.length + 1 < maxWidth) {
+                        currentLine += ' ' + word;
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = word;
+                    }
+                }
+                lines.push(currentLine);
+                return lines;
+            }
+
+            const chartData = {
+                labels: chartLabels,
+                datasets: [{
+                    label: 'Your Species Affinity',
+                    data: Object.values(scores),
+                     // Updated chart colors
+                    backgroundColor: 'rgba(91, 16, 139, 0.2)', // New purple with alpha
+                    borderColor: newPurpleColor, 
+                    borderWidth: 2,
+                    pointBackgroundColor: newPurpleColor, 
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: newPurpleColor 
+                }]
+            };
+
+            const chartConfig = {
+                type: 'radar',
+                data: chartData,
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            min: -1, 
+                            angleLines: {
+                                color: 'rgba(255, 255, 255, 0.2)'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.2)'
+                            },
+                            pointLabels: {
+                                color: '#e2e8f0',
+                                font: {
+                                    size: 14 // Increased point label size
+                                }
+                            },
+                            ticks: {
+                                color: '#94a3b8',
+                                backdropColor: 'rgba(0,0,0,0.5)',
+                                stepSize: 1,
+                                callback: function(value, index, values) {
+                                    if (value === -1) return ''; // Hide -1 labeld
+                                    return value;
+                                },
+                                font: {
+                                    size: 12 // Adjusted tick label size if needed
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(31, 41, 55, 0.9)',
+                             // Apply custom fonts to tooltips, increased size
+                            titleFont: { size: 16, family: "'Quotex', 'Spectral', serif" },
+                            bodyFont: { size: 14, family: "'Typewriter Condensed', 'Inter', sans-serif" },
+                            padding: 10,
+                            cornerRadius: 4,
+                            callbacks: {
+                                label: () => '',
+                                afterBody: function(context) {
+                                    const speciesKey = Object.keys(scores)[context[0].dataIndex];
+                                    const description = results[speciesKey].description;
+                                    return wrapText(description, 40);
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            resultChart = new Chart(resultChartEl, chartConfig);
+        }
+
+        startBtn.addEventListener('click', startQuiz);
+        restartBtn.addEventListener('click', startQuiz);
+
+    </script></body></html>
+

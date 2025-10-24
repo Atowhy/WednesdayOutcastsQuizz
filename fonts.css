@@ -1,0 +1,23 @@
+/* Define the Quotex font */
+@font-face {
+  font-family: 'Quotex';
+  src: url('Quotex.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Define the Nocturne Serif font */
+@font-face {
+  font-family: 'Nocturne Serif';
+  src: url('NOCTURNESERIFTEST-MEDIUM-UPLOADED-63B633DE32D04.otf') format('opentype');
+  font-weight: 500; /* Medium weight */
+  font-style: normal;
+}
+
+/* Define the Typewriter Condensed font */
+@font-face {
+  font-family: 'Typewriter Condensed';
+  src: url('TYPEWCOND_REGULAR.otf') format('opentype');
+  font-weight: normal; /* Regular weight */
+  font-style: normal;
+}
