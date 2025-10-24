@@ -39,6 +39,21 @@
             filter: brightness(0.4); /* Darken the video slightly */
         }
 
+        /* Reveal Video Styles */
+        #reveal-video {
+            display: none; /* Hidden by default */
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -50; /* Above background, below content */
+            background-size: cover;
+            mix-blend-mode: color-dodge; /* Apply color dodge */
+        }
+
         /* Custom scrollbar for a more gothic feel */
         ::-webkit-scrollbar {
             width: 8px;
@@ -151,6 +166,11 @@
         Your browser does not support the video tag.
     </video>
 
+    <!-- Reveal Video (New) -->
+    <video id="reveal-video" muted playsinline>
+        <!-- Source will be set by JS -->
+    </video>
+
     <div id="quiz-container" class="w-full max-w-2xl mx-auto relative z-10"> <!-- Ensure quiz content is above video -->
         
         <!-- Start Screen --><div id="start-screen" class="text-center">
@@ -237,6 +257,10 @@
         const subResultTitleEl = document.getElementById('sub-result-title');
         const resultChartEl = document.getElementById('result-chart');
         const tooltip = document.getElementById('tooltip');
+
+        // Video elements
+        const backgroundVideo = document.getElementById('background-video');
+        const revealVideo = document.getElementById('reveal-video');
 
         let currentQuestionIndex = 0;
         let scores = {};
@@ -478,6 +502,12 @@ Alpha: {
             if(resultChart){
                 resultChart.destroy();
             }
+
+            // Hide reveal video on restart
+            revealVideo.style.display = 'none';
+            revealVideo.pause();
+            revealVideo.currentTime = 0;
+
             showQuestion();
         }
 
@@ -553,6 +583,21 @@ Alpha: {
         }
 
         function displayFinalResult(chosenSpecies, scoresArray) {
+            // --- Play Reveal Video ---
+            try {
+                revealVideo.src = 'BGRevealQuizzWed.mp4';
+                revealVideo.style.display = 'block';
+                revealVideo.play().catch(error => {
+                    console.error("Reveal video play failed:", error);
+                    // Hide it if it fails to play
+                    revealVideo.style.display = 'none';
+                });
+            } catch (e) {
+                console.error("Error setting up reveal video:", e);
+                revealVideo.style.display = 'none';
+            }
+            // --- End Reveal Video ---
+
             const resultData = results[chosenSpecies];
             resultTitleEl.innerText = resultData.title;
             resultTitleEl.classList.add('animate-slow-glow');
@@ -730,5 +775,10 @@ Alpha: {
         startBtn.addEventListener('click', startQuiz);
         restartBtn.addEventListener('click', startQuiz);
 
-    </script></body></html>
+        // Add event listener for when the reveal video finishes
+        revealVideo.addEventListener('ended', () => {
+            revealVideo.style.display = 'none'; // Hide it
+            revealVideo.src = ''; // Clear source to free up memory
+        });
 
+    </script></body></html>
