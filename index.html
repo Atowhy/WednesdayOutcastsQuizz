@@ -6,13 +6,13 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Link to the separate fonts CSS file -->
     <link rel="stylesheet" href="fonts.css">
     <style>
         body {
             /* Apply Typewriter Condensed as the base font */
             font-family: 'Typewriter Condensed', 'Inter', sans-serif;
-            overflow: hidden; /* Prevent scrollbars caused by video */
+            overflow-x: hidden; /* Prevent horizontal scrollbars caused by video */
+            overflow-y: auto; /* Allow vertical scrolling when content overflows */
             font-size: 1.15rem; /* Increased base font size by 15% */
             line-height: 1.5; /* Adjust line height for readability */
         }
@@ -25,17 +25,17 @@
             font-family: 'Nocturne Serif', 'Spectral', serif;
         }
 
+        /* === UPDATED VIDEO STYLES === */
+
         /* Video Background Styles */
         #background-video {
             position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures video covers the screen, maintaining aspect ratio */
             z-index: -100; /* Place it behind everything */
-            background-size: cover;
             filter: brightness(0.4); /* Darken the video slightly */
         }
 
@@ -43,16 +43,17 @@
         #reveal-video {
             display: none; /* Hidden by default */
             position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures video covers the screen, maintaining aspect ratio */
             z-index: -50; /* Above background, below content */
-            background-size: cover;
             mix-blend-mode: color-dodge; /* Apply color dodge */
         }
+
+        /* === END UPDATED STYLES === */
+
 
         /* Custom scrollbar for a more gothic feel */
         ::-webkit-scrollbar {
@@ -160,85 +161,63 @@
 
     </style></head><body class="bg-gray-900 text-gray-200 min-h-screen flex items-center justify-center p-4 transition-all duration-500">
 
-    <!-- Background Video -->
-    <video autoplay loop muted id="background-video">
+    <video autoplay loop muted playsinline id="background-video">
         <source src="BGQuizzWed.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 
-    <!-- Reveal Video (New) -->
     <video id="reveal-video" muted playsinline>
-        <!-- Source will be set by JS -->
-    </video>
+        </video>
 
-    <div id="quiz-container" class="w-full max-w-2xl mx-auto relative z-10"> <!-- Ensure quiz content is above video -->
-        
-        <!-- Start Screen --><div id="start-screen" class="text-center">
-            <!-- Use font-quotex for the main title, increased size -->
+    <div id="quiz-container" class="w-full max-w-2xl mx-auto relative z-10"> <div id="start-screen" class="text-center">
             <h1 class="font-quotex text-5xl md:text-6xl font-bold mb-4 text-white opacity-0 animate-fade-in-up">Which Nevermore Outcast Are You?</h1>
-             <!-- Increased font size, adjusted padding/margin if needed to keep on one line -->
-            <p class="text-xl text-gray-400 mb-10 opacity-0 animate-fade-in-up animation-delay-300 px-4">Your powers are a mirror of your inner self. Answer the questions to reveal the truth.</p>
+             <p class="text-xl text-gray-400 mb-10 opacity-0 animate-fade-in-up animation-delay-300 px-4">Your powers are a mirror of your inner self. Answer the questions to reveal the truth.</p>
             
             <button id="start-btn" class="bg-custom-purple hover:bg-custom-purple-dark text-white font-bold py-3 px-8 rounded-lg text-xl transition-transform transform hover:scale-105 shadow-lg opacity-0 animate-very-slow-fade-in animation-delay-1000">Begin the Diagnosis</button>
         </div>
 
-        <!-- Quiz Screen --><div id="quiz-screen" class="hidden">
+        <div id="quiz-screen" class="hidden">
             <div id="question-card" class="question-card border border-gray-700 rounded-xl shadow-2xl p-6 md:p-8">
-                 <!-- Increased font size -->
-                <p id="question-counter" class="text-base text-custom-purple-light mb-2 font-semibold"></p>
-                 <!-- Increased font size -->
-                <h2 id="question-text" class="text-3xl font-bold mb-6 text-white"></h2>
+                 <p id="question-counter" class="text-base text-custom-purple-light mb-2 font-semibold"></p>
+                 <h2 id="question-text" class="text-3xl font-bold mb-6 text-white"></h2>
                 <div id="answer-buttons" class="grid grid-cols-1 gap-4">
-                    <!-- Answer buttons will be inserted here --></div>
+                    </div>
             </div>
         </div>
         
-        <!-- Tie Screen --><div id="tie-screen" class="hidden">
+        <div id="tie-screen" class="hidden">
             <div class="tie-card border border-gray-700 rounded-xl shadow-2xl p-6 md:p-8 text-center">
-                 <!-- Use font-quotex for the tie screen title, increased size -->
-                <h2 class="font-quotex text-4xl md:text-5xl font-bold mb-4 text-white">Your Affinity is Split</h2>
-                 <!-- Increased font size -->
-                <p class="text-xl text-gray-400 mb-8">Your answers point to multiple paths. Choose the one that calls to you.</p>
+                 <h2 class="font-quotex text-4xl md:text-5xl font-bold mb-4 text-white">Your Affinity is Split</h2>
+                 <p class="text-xl text-gray-400 mb-8">Your answers point to multiple paths. Choose the one that calls to you.</p>
                 <div id="tie-buttons" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Tie buttons will be inserted here --></div>
+                    </div>
             </div>
         </div>
 
         <div id="result-screen" class="hidden opacity-0">
             <div class="result-card border border-gray-700 rounded-xl shadow-2xl p-6 md:p-8 text-center">
-                <!-- Increased font size, updated color -->
                 <p class="text-custom-purple-light font-semibold mb-2 text-lg">Your Outcast Profile:</p>
-                 <!-- Use font-quotex for the main result title, increased size -->
-                <h2 id="result-title" class="font-quotex text-5xl md:text-6xl font-bold mb-4 text-white"></h2>
-                 <!-- Increased font size -->
-                <div id="result-icon" class="text-7xl my-6"></div>
-                 <!-- Increased font size -->
-                <p id="result-description" class="text-gray-300 text-lg md:text-xl mb-8 leading-relaxed"></p>
+                 <h2 id="result-title" class="font-quotex text-5xl md:text-6xl font-bold mb-4 text-white"></h2>
+                 <div id="result-icon" class="text-7xl my-6"></div>
+                 <p id="result-description" class="text-gray-300 text-lg md:text-xl mb-8 leading-relaxed"></p>
                 
                 <div id="sub-result-container" class="mt-8 border-t border-gray-700 pt-8">
-                    <!-- Increased font size, updated color -->
                     <p class="text-custom-purple-light font-semibold mb-2 text-lg">Your Secondary Affinity:</p>
-                    <!-- Use font-nocturne for the secondary result title, increased size -->
                     <h3 id="sub-result-title" class="font-nocturne text-3xl font-bold text-white"></h3>
                 </div>
 
                 <div class="my-10">
-                    <!-- Increased font size, updated color -->
                     <h3 class="text-2xl font-semibold text-custom-purple-light mb-4">Your Affinity Analysis</h3>
-                    <div class="w-full max-w-md mx-auto h-72 md:h-96"> <!-- Increased height slightly -->
-                         <canvas id="result-chart"></canvas>
+                    <div class="w-full mx-auto h-72 md:h-96 flex justify-center items-center"> <canvas id="result-chart"></canvas>
                     </div>
                 </div>
-                <!-- Increased font size -->
                 <button id="restart-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg text-xl transition-transform transform hover:scale-105 shadow-lg">Try Again</button>
             </div>
         </div>
 
     </div>
     
-    <!-- Custom Tooltip --><div id="tooltip" class="hidden absolute bg-gray-800 text-white text-base rounded-lg p-3 max-w-xs z-50 pointer-events-none shadow-lg leading-relaxed"></div> <!-- Increased text size -->
-
-    <script>
+    <div id="tooltip" class="hidden absolute bg-gray-800 text-white text-base rounded-lg p-3 max-w-xs z-50 pointer-events-none shadow-lg leading-relaxed"></div> <script>
         const startBtn = document.getElementById('start-btn');
         const restartBtn = document.getElementById('restart-btn');
         const startScreen = document.getElementById('start-screen');
@@ -272,140 +251,140 @@
 
         const questions = [
              {
-                question: "You're given a glimpse of the future. What do you see?",
+                question: "What is your deepest feeling about the future?",
                 answers: [
-                    { text: "A grim, inevitable outcome. It's best to be prepared for the worst.", species: "Raven" },
-                    { text: "A bright possibility. There's always hope, even if it's faint.", species: "Dove" },
-                    { text: "A chaotic series of events. I'll need my friends to navigate it.", species: "Werewolf" },
-                    { text: "An opportunity to shift things in my favor.", species: "Siren" },
-                    { text: "A glimpse of a brilliant new invention, fully formed in my mind.", species: "DaVinci" }
+                    { text: "A grim, inevitable outcome.", species: "Raven" },
+                    { text: "A bright possibility. There's always hope.", species: "Dove" },
+                    { text: "A chaotic series of events that I can only navigate with my friends.", species: "Werewolf" },
+                    { text: "An opportunity to shift events in my favor.", species: "Siren" },
+                    { text: "A glimpse of a brilliant new invention from my equally brilliant mind.", species: "DaVinci" }
                 ]
             },
             {
                 question: "How do you handle social gatherings?",
                 answers: [
                     { text: "I find a quiet corner and observe everyone's behavior.", species: "Shapeshifter" },
-                    { text: "I stick to my small, trusted group. Safety in numbers.", species: "Werewolf" },
-                    { text: "I avoid eye contact and keep to myself to prevent... complications.", species: "Gorgon" },
+                    { text: "I stick to my small, trusted group.", species: "Werewolf" },
+                    { text: "I avoid eye contact.", species: "Gorgon" },
                     { text: "I prefer to stay home. People are exhausting.", species: "Vampire" },
-                    { text: "I feel a constant urge to break free from the noise and unleash my true self.", species: "Alpha" }
+                    { text: "I feel a restless energy that urges me to escape.", species: "Alpha" }
                 ]
             },
             {
                 question: "Someone has deeply betrayed you. Your first instinct is to:",
                 answers: [
-                    { text: "Retreat and analyze. Their motives are more interesting than my anger.", species: "Raven" },
-                    { text: "Unleash a part of myself they never knew existed. They will regret it.", species: "Hyde" },
-                    { text: "Cut them off. My circle is built on loyalty, and they broke the code.", species: "Werewolf" },
-                    { text: "Use their weakness against them, subtly turning their world upside down.", species: "Siren" },
-                    { text: "Feel the hum of the world around me, asking my unseen allies for insight.", species: "Swarmer" }
+                    { text: "Retreat and analyze.", species: "Raven" },
+                    { text: "I feel an overwhelming, almost frightening surge of raw emotion.", species: "Hyde" },
+                    { text: "I go to my friends.", species: "Werewolf" },
+                    { text: "Make them regret it by undermining them.", species: "Siren" },
+                    { text: "Offer forgiveness.", species: "Dove" }
                 ]
             },
             {
-                question: "What is your relationship with your family's expectations?",
+                question: "Your ideal weekend is spent:",
                 answers: [
-                    { text: "They've set a path for me, but I feel like I'm destined for something different, something more.", species: "Alpha" },
-                    { text: "I feel immense pressure to live up to their legacy.", species: "Werewolf" },
-                    { text: "I respect their guidance, but my path is my own to forge.", species: "Dove" },
-                    { text: "Their expectations are irrelevant. I operate on my own terms.", species: "Raven" },
-                    { text: "I feel the weight of their secrets, a history passed down through touch and whispers.", species: "Psychic" }
+                    { text: "Planning or executing a long-term project.", species: "Vampire" },
+                    { text: "Designing my next intricate project.", species: "DaVinci" },
+                    { text: "Hanging out with friends.", species: "Werewolf" },
+                    { text: "Having a massive party!", species: "Swarmer" },
+                    { text: "Thrift shopping.", species: "Shapeshifter" }
                 ]
             },
             {
-                question: "You're faced with a complex problem. How do you solve it?",
+                question: "How do you get what you want?",
                 answers: [
-                    { text: "Through intense, focused creativity. I'll build or design a solution.", species: "DaVinci" },
-                    { text: "I consult the wisdom of those who came before me.", species: "Psychic" },
-                    { text: "I rally a group to tackle it head-on.", species: "Siren" },
-                    { text: "I find an unconventional ally others might overlook.", species: "Swarmer" },
-                    { text: "I must suppress my first, more violent, instinct and think carefully.", species: "Hyde" }
+                    { text: "I find leverage.", species: "Vampire" },
+                    { text: "I mobilize my network and make it a common cause.", species: "Swarmer" },
+                    { text: "I just go in with pure confidence and willpower.", species: "Alpha" },
+                    { text: "I wait patiently for the right, peaceful opportunity.", species: "Dove" },
+                    { text: "I persuade or provoke, depends on the situation.", species: "Siren" }
                 ]
             },
             {
-                question: "Your personal space is:",
+                question: "You need to intimidate a rival. You:",
                 answers: [
-                    { text: "A dark, comfortable sanctuary where I can recharge away from the world.", species: "Vampire" },
-                    { text: "A creative, chaotic mess filled with my ongoing projects.", species: "DaVinci" },
-                    { text: "Wherever my pack is. Home is about people, not places.", species: "Gorgon" }, // Altered from Werewolf
-                    { text: "Minimalist. I don't get attached to things or places.", species: "Shapeshifter" },
-                    { text: "Filled with hope and light, a place that encourages growth.", species: "Dove" }
+                    { text: "Use their fear against them.", species: "Vampire" },
+                    { text: "Let them know you have eyes and ears everywhere.", species: "Swarmer" },
+                    { text: "Stare at them.", species: "Gorgon" },
+                    { text: "Challenge them in a battle of wits.", species: "DaVinci" },
+                    { text: "Pop my biceps out.", species: "Alpha" }
                 ]
             },
             {
-                question: "How do you feel about your own deepest emotions?",
+                question: "The greatest risk you can take is:",
                 answers: [
-                    { text: "They are a dangerous liability. I keep them locked away.", species: "Hyde" },
-                    { text: "They are a source of strength, especially when protecting others.", species: "Werewolf" },
-                    { text: "They are a tool to be understood and, when necessary, used.", species: "Siren" },
-                    { text: "They are a constant storm that risks consuming me if I'm not careful.", species: "Raven" },
-                    { text: "They are an ancient force I am bound to by blood and tradition.", species: "Vampire" }
+                    { text: "Fully committing to a confrontation where I am outmatched.", species: "Alpha" },
+                    { text: "Offering forgiveness to someone who will certainly betray that trust.", species: "Dove" },
+                    { text: "Allowing me to lose my selfcontrol.", species: "Hyde" },
+                    { text: "Letting someone see my true self.", species: "Gorgon" },
+                    { text: "Dressing wrong for the part.", species: "Shapeshifter" }
                 ]
             },
             {
-                question: "You must blend in with 'normies'. Your strategy is:",
+                question: "Which concept are you most fascinated by?",
                 answers: [
-                    { text: "Become a perfect mirror of whoever I'm with. They'll never know.", species: "Shapeshifter" },
-                    { text: "Just be quiet and wear a hat. It's a surprisingly effective disguise.", species: "Gorgon" },
-                    { text: "I don't. Blending in is a form of surrender.", species: "Alpha" }, // Altered from Raven
-                    { text: "Charm them. A little charisma makes everyone lower their guard.", species: "Siren" },
-                    { text: "I listen to their thoughts, giving them the answers they want to hear.", species: "Psychic" }
+                    { text: "The design of a complex machine.", species: "DaVinci" },
+                    { text: "The power of a single voice to command a room.", species: "Siren" },
+                    { text: "The elegance of ancient history and the secrets it holds.", species: "Vampire" },
+                    { text: "The overwhelming power of a collective.", species: "Swarmer" },
+                    { text: "The raw, painful truths hidden in dark poetry.", species: "Raven" }
+                ]
+            },
+            {
+                question: "When you feel pressure to conform, how do you handle it?",
+                answers: [
+                    { text: "I blend in perfectly.", species: "Shapeshifter" },
+                    { text: "I simply refuse. I'd rather face the consequences than compromise my nature.", species: "Gorgon" },
+                    { text: "I outwardly conform but quietly undermine the whole effort.", species: "Raven" },
+                    { text: "I look for a cathartic outlet for the building pressure.", species: "Hyde" },
+                    { text: "I make them believe they need to conform to me.", species: "Siren" }
+                ]
+            },
+            {
+                question: "How do you typically react when injustice is inflicted on someone weaker?",
+                answers: [
+                    { text: "I intervene immediately.", species: "Alpha" },
+                    { text: "I shame the aggressor publicly.", species: "Siren" },
+                    { text: "I search for a non-violent solution that teaches a lesson.", species: "DaVinci" },
+                    { text: "I immediately rush to the victim's side.", species: "Werewolf" },
+                    { text: "I alert everyone I know. This kind of injustice requires a public confrontation.", species: "Swarmer" }
                 ]
             },
             {
                 question: "Your greatest fear is:",
                 answers: [
-                    { text: "Losing control and hurting someone I care about.", species: "Hyde" },
-                    { text: "Being ostracized and left completely alone.", species: "Werewolf" },
-                    { text: "My own potential. The power inside me could lead to madness.", species: "DaVinci" },
-                    { text: "Never knowing if people's feelings for me are real.", species: "Siren" },
-                    { text: "Seeing a terrible future but being unable to convince anyone to change it.", species: "Raven" }
+                    { text: "Being completely isolated.", species: "Werewolf" },
+                    { text: "Losing my influence over others.", species: "Vampire" },
+                    { text: "Losing my temper.", species: "Hyde" },
+                    { text: "Being intellectually outmatched.", species: "DaVinci" },
+                    { text: "That my true self might be rejected.", species: "Shapeshifter" }
                 ]
             },
             {
-                question: "Choose a companion for a quiet afternoon:",
+                question: "Your primary defense mechanism is:",
                 answers: [
-                    { text: "The company of bees in a garden.", species: "Swarmer" },
-                    { text: "The ghosts of my ancestors.", species: "Psychic" },
-                    { text: "A good book in a dimly lit room.", species: "Vampire" },
-                    { text: "No one. Solitude is where I think most clearly.", species: "DaVinci" }, // Altered from Raven
-                    { text: "My pack. Quiet time is still better together.", species: "Werewolf" }
-                ]
-            },
-            {
-                question: "When you look in a mirror, you see:",
-                answers: [
-                    { text: "A stranger I don't fully recognize.", species: "Hyde" },
-                    { text: "A momentary reflection before I quickly look away. It's safer.", species: "Gorgon" },
-                    { text: "Just one of many faces I can wear.", species: "Shapeshifter" },
-                    { text: "A reflection of my family's legacy, for better or worse.", species: "Vampire" }, // Altered from Werewolf
-                    { text: "A flicker of a possible future, and it isn't always good.", species: "Raven" }
-                ]
-            },
-            {
-                question: "Power is...",
-                answers: [
-                    { text: "... a burden that isolates you from others.", species: "Psychic" }, // Altered from Raven
-                    { text: "... a responsibility to lead and influence.", species: "Siren" },
-                    { text: "... a dangerous force that must be controlled at all costs.", species: "Hyde" },
-                    { text: "... most effective when no one knows you have it.", species: "Shapeshifter" },
-                    { text: "... the freedom to not be ruled by anyone else's expectations.", species: "Alpha" }
+                    { text: "Complete emotional withdrawal.", species: "Raven" },
+                    { text: "To avoid intense confrontation.", species: "Gorgon" },
+                    { text: "Disarming them with overwhelming kindness.", species: "Dove" },
+                    { text: "My strength.", species: "Alpha" },
+                    { text: "My group of friends.", species: "Werewolf" }
                 ]
             },
             {
                 question: "Your preferred method of communication is:",
                 answers: [
-                    { text: "Direct, blunt, and devoid of emotion.", species: "Raven" },
-                    { text: "Persuasive and tailored to my audience.", species: "Siren" },
-                    { text: "Non-verbal. My actions speak for me.", species: "Gorgon" },
-                    { text: "I prefer to listen. I learn more that way.", species: "Shapeshifter" },
-                    { text: "Inspirational. I speak to bring out the best in others.", species: "Dove" }
+                    { text: "Direct and blunt.", species: "Raven" },
+                    { text: "Persuasive and tailored to the audience.", species: "Siren" },
+                    { text: "Non-verbal. A single look says it all.", species: "Gorgon" },
+                    { text: "Adapting my style to perfectly match who I'm talking to.", species: "Shapeshifter" },
+                    { text: "Calming and inspirational.", species: "Dove" }
                 ]
             },
             {
                 question: "You find an old, forgotten diary. You:",
                 answers: [
-                    { text: "Touch it, hoping for a psychic echo of its owner's past.", species: "Psychic" },
-                    { text: "Analyze it for secrets and leverage they might provide.", species: "Raven" }, // Altered from Siren
+                    { text: "I'm drawn to it, hoping to perceive the residue of the owner's strongest emotions.", species: "Raven" },
+                    { text: "Read it. Knowledge is power.", species: "Vampire" },
                     { text: "Leave it. Some secrets are best left buried.", species: "Gorgon" },
                     { text: "See it as a puzzle, a complex system of thoughts to decode.", species: "DaVinci" },
                     { text: "Hope it contains a story of redemption and hope.", species: "Dove" }
@@ -414,11 +393,21 @@
             {
                 question: "A friend is in danger. You:",
                 answers: [
-                    { text: "Transform into whatever is necessary to protect them, no matter the cost.", species: "Alpha" },
-                    { text: "Rally my other friends. We're stronger together.", species: "Werewolf" },
-                    { text: "Tap into a frightening inner strength I keep hidden.", species: "Hyde" },
-                    { text: "Use my unique, and perhaps strange, talents to create a diversion.", species: "Swarmer" },
-                    { text: "Invent a device on the fly to get them out of trouble.", species: "DaVinci" }
+                    { text: "I take charge and confront the threat head-on.", species: "Alpha" },
+                    { text: "I call my other friends.", species: "Werewolf" },
+                    { text: "I might become violent.", species: "Hyde" },
+                    { text: "I create a diversion.", species: "Swarmer" },
+                    { text: "I help them talk their way out of it.", species: "Siren" }
+                ]
+            },
+            {
+                question: "Your personal philosophy can be summed up as:",
+                answers: [
+                    { text: "Hope is a guiding light, and kindness is strength.", species: "Dove" },
+                    { text: "Knowledge is the only true currency.", species: "Vampire" },
+                    { text: "Always let them see who they want to see.", species: "Shapeshifter" },
+                    { text: "Raw instinct is the only real truth.", species: "Hyde" },
+                    { text: "Power isn't given; it's taken.", species: "Alpha" }
                 ]
             }
         ];
@@ -474,12 +463,7 @@
                 icon: "✍️",
                 description: "You are a fascinating blend of telekinesis and artistic genius. You move the world with your mind, but this ability is intrinsically linked to your heightened creativity and intellect. You are an inventor, a creator, a 'mad genius'. This profound power comes with a great risk: the potential for it to overwhelm your psyche and drive you to insanity. Your mind is both your greatest tool and your most fragile asset."
             },
-            Psychic: {
-                 title: "Psychic",
-                 icon: "🔮",
-                 description: "You are a seer, gifted with visions of the past, present, and future. Your power is deeply personal and often involuntary, triggered by touch. This makes you powerful, but also potentially unstable. You must seek guidance from spirits, as your journey to mastery is a solitary one. Your greatest challenge is not just controlling your power, but mastering your own psyche."
-            },
-Alpha: {
+            Alpha: {
                 title: "Alpha Werewolf",
                 icon: "🌕",
                 description: "You are a rare and powerful anomaly. Your werewolf abilities are greatly enhanced, and you are liberated from the lunar cycle, able to transform at will. But this power is a terrifying curse. You are feared as a 'loose cannon' by your own kind, and a single transformation under the full moon could trap you in wolf form forever, making you an outlaw to be hunted by your former pack."
@@ -488,7 +472,7 @@ Alpha: {
 
         function startQuiz() {
             currentQuestionIndex = 0;
-            scores = { Raven: 0, Dove: 0, Werewolf: 0, Siren: 0, Gorgon: 0, Vampire: 0, Hyde: 0, Shapeshifter: 0, Swarmer: 0, DaVinci: 0, Psychic: 0, Alpha: 0 };
+            scores = { Raven: 0, Dove: 0, Werewolf: 0, Siren: 0, Gorgon: 0, Vampire: 0, Hyde: 0, Shapeshifter: 0, Swarmer: 0, DaVinci: 0, Alpha: 0 };
             startScreen.classList.add('hidden');
             tieScreen.classList.add('hidden');
             
