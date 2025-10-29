@@ -470,6 +470,16 @@
             }
         };
 
+        /* --- NEW --- Utility function to shuffle an array (Fisher-Yates) */
+        function shuffleArray(array) {
+            let newArray = [...array]; // Create a copy
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]]; // ES6 swap
+            }
+            return newArray;
+        }
+
         function startQuiz() {
             currentQuestionIndex = 0;
             scores = { Raven: 0, Dove: 0, Werewolf: 0, Siren: 0, Gorgon: 0, Vampire: 0, Hyde: 0, Shapeshifter: 0, Swarmer: 0, DaVinci: 0, Alpha: 0 };
@@ -500,11 +510,16 @@
             const question = questions[currentQuestionIndex];
             questionCounterEl.innerText = `Question ${currentQuestionIndex + 1} / ${questions.length}`;
             questionTextEl.innerText = question.question;
-            question.answers.forEach(answer => {
+
+            // --- UPDATED --- Create a shuffled copy of the answers
+            const shuffledAnswers = shuffleArray(question.answers);
+
+            // --- UPDATED --- Loop over the shuffled answers
+            shuffledAnswers.forEach(answer => {
                 const button = document.createElement('button');
                 button.innerText = answer.text;
-                 // Increased font size, updated hover color
-                button.classList.add('bg-gray-700', 'hover:bg-custom-purple', 'text-white', 'font-semibold', 'py-3', 'px-4', 'rounded-lg', 'text-left', 'transition-all', 'duration-200', 'transform', 'hover:scale-102', 'text-lg'); 
+                 // --- UPDATED --- Increased font size, updated hover color, and changed hover:scale-102 to hover:scale-105
+                button.classList.add('bg-gray-700', 'hover:bg-custom-purple', 'text-white', 'font-semibold', 'py-3', 'px-4', 'rounded-lg', 'text-left', 'transition-all', 'duration-200', 'transform', 'hover:scale-105', 'text-lg'); 
                 button.addEventListener('click', () => selectAnswer(answer.species));
                 answerButtonsEl.appendChild(button);
             });
