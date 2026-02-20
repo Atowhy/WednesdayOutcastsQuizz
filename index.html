@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Which Outcast Species Are You?</title>
@@ -11,15 +14,21 @@
         body {
             /* Apply Typewriter Condensed as the base font */
             font-family: 'Typewriter Condensed', 'Inter', sans-serif;
-            overflow-x: hidden; /* Prevent horizontal scrollbars caused by video */
-            overflow-y: auto; /* Allow vertical scrolling when content overflows */
-            font-size: 1.15rem; /* Increased base font size by 15% */
-            line-height: 1.5; /* Adjust line height for readability */
+            overflow-x: hidden;
+            /* Prevent horizontal scrollbars caused by video */
+            overflow-y: auto;
+            /* Allow vertical scrolling when content overflows */
+            font-size: 1.15rem;
+            /* Increased base font size by 15% */
+            line-height: 1.5;
+            /* Adjust line height for readability */
         }
+
         .font-quotex {
-             /* Apply Quotex font */
+            /* Apply Quotex font */
             font-family: 'Quotex', 'Spectral', serif;
         }
+
         .font-nocturne {
             /* Apply Nocturne Serif font */
             font-family: 'Nocturne Serif', 'Spectral', serif;
@@ -34,22 +43,29 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Ensures video covers the screen, maintaining aspect ratio */
-            z-index: -100; /* Place it behind everything */
-            filter: brightness(0.4); /* Darken the video slightly */
+            object-fit: cover;
+            /* Ensures video covers the screen, maintaining aspect ratio */
+            z-index: -100;
+            /* Place it behind everything */
+            filter: brightness(0.4);
+            /* Darken the video slightly */
         }
 
         /* Reveal Video Styles */
         #reveal-video {
-            display: none; /* Hidden by default */
+            display: none;
+            /* Hidden by default */
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Ensures video covers the screen, maintaining aspect ratio */
-            z-index: -50; /* Above background, below content */
-            mix-blend-mode: color-dodge; /* Apply color dodge */
+            object-fit: cover;
+            /* Ensures video covers the screen, maintaining aspect ratio */
+            z-index: -50;
+            /* Above background, below content */
+            mix-blend-mode: color-dodge;
+            /* Apply color dodge */
         }
 
         /* === END UPDATED STYLES === */
@@ -59,107 +75,401 @@
         ::-webkit-scrollbar {
             width: 8px;
         }
+
         ::-webkit-scrollbar-track {
             background: #1a202c;
         }
+
         ::-webkit-scrollbar-thumb {
             background: #4a5568;
             border-radius: 4px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: #718096;
         }
-        .question-card, .result-card, .tie-card {
+
+        .question-card,
+        .result-card,
+        .tie-card {
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            background-color: rgba(31, 41, 55, 0.7); /* Adjust alpha for better readability over video */
+            background-color: rgba(31, 41, 55, 0.7);
+            /* Adjust alpha for better readability over video */
         }
-        
+
         /* Animations */
 
-        @keyframes fadeInUp {
+        @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
-                transform: translateY(0);
             }
-        }
-        .animate-fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
         }
 
-        @keyframes slowFadeInUp {
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        /* Simplified slow fade */
+        @keyframes slowFadeIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
-                transform: translateY(0);
             }
         }
-        .animate-slow-fade-in-up {
-            animation: slowFadeInUp 1.5s ease-out forwards;
+
+        .animate-slow-fade-in {
+            animation: slowFadeIn 1.5s ease-out forwards;
         }
 
         @keyframes verySlowFadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
+
         .animate-very-slow-fade-in {
-          animation: verySlowFadeIn 2.5s ease-in forwards;
+            animation: verySlowFadeIn 2.5s ease-in forwards;
         }
 
         @keyframes slowFadeIn {
             from {
                 opacity: 0;
             }
+
             to {
                 opacity: 1;
             }
         }
+
         .animate-slow-fade-in {
             animation: slowFadeIn 2s ease-in forwards;
         }
 
-        @keyframes slowGlow {
-          0%, 100% {
-            /* Using the light purple color for the glow */
-            text-shadow: 0 0 10px rgba(164, 110, 219, 0.3), 0 0 15px rgba(164, 110, 219, 0.3);
-          }
-          50% {
-            text-shadow: 0 0 20px rgba(164, 110, 219, 0.7), 0 0 30px rgba(164, 110, 219, 0.7);
-          }
+        /* Transition Animations */
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
         }
+
+        .animate-fade-out {
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+
+        /* Moon Loader Animation */
+        .moon-loader {
+            width: 120px;
+            /* Increased size */
+            height: 120px;
+            /* Increased size */
+            border-radius: 50%;
+            background-color: #e5e7eb;
+            /* Light grey moon */
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
+            /* slightly increased glow */
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto 30px auto;
+            /* adjusted margin */
+        }
+
+        .moon-loader::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #111827;
+            /* Dark shadow matching bg */
+            border-radius: 50%;
+            animation: moonPhase 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes moonPhase {
+            0% {
+                transform: translateX(100%);
+            }
+
+            50% {
+                transform: translateX(0);
+            }
+
+            /* New Moon */
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        @keyframes slowGlow {
+
+            0%,
+            100% {
+                /* Using the light purple color for the glow */
+                text-shadow: 0 0 10px rgba(164, 110, 219, 0.3), 0 0 15px rgba(164, 110, 219, 0.3);
+            }
+
+            50% {
+                text-shadow: 0 0 20px rgba(164, 110, 219, 0.7), 0 0 30px rgba(164, 110, 219, 0.7);
+            }
+        }
+
         .animate-slow-glow {
-          animation: slowGlow 4s ease-in-out infinite;
+            animation: slowGlow 4s ease-in-out infinite;
         }
 
         .animation-delay-300 {
             animation-delay: 300ms;
         }
+
         .animation-delay-600 {
             animation-delay: 600ms;
         }
+
         .animation-delay-1000 {
             animation-delay: 1000ms;
         }
-        
-        /* Custom styles for the new purple color */
-        .bg-custom-purple { background-color: #5b108b; }
-        .hover\:bg-custom-purple-dark:hover { background-color: #490d70; } /* Slightly darker shade for hover */
-        .text-custom-purple-light { color: #a46edb; } /* Lighter shade for text */
-        .text-custom-purple { color: #5b108b; }
-        .decoration-custom-purple { text-decoration-color: #5b108b; }
 
-    </style></head><body class="bg-gray-900 text-gray-200 min-h-screen flex items-center justify-center p-4 transition-all duration-500">
+        /* Custom styles for the new purple color */
+        .bg-custom-purple {
+            background-color: #5b108b;
+        }
+
+        .hover\:bg-custom-purple-dark:hover {
+            background-color: #490d70;
+        }
+
+        /* Slightly darker shade for hover */
+        .text-custom-purple-light {
+            color: #a46edb;
+        }
+
+        /* Lighter shade for text */
+        .text-custom-purple {
+            color: #5b108b;
+        }
+
+        .text-custom-purple {
+            color: #5b108b;
+        }
+
+        .decoration-custom-purple {
+            text-decoration-color: #5b108b;
+        }
+
+        /* === NEW VISUAL ENHANCEMENTS === */
+
+        /* Vignette Overlay */
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* Transition Effects */
+        /* Transition Effects - REMOVED (Replaced by animations) */
+
+        /* Typewriter Cursor (optional purely visual) */
+        .typewriter-cursor::after {
+            content: '|';
+            animation: blink 1s step-start infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* === ROUND 2 ENHANCEMENTS === */
+
+        /* --- NEW --- Poison Vial Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 12px;
+            /* Slightly taller for the 'vial' look */
+            background: rgba(31, 41, 55, 0.9);
+            /* Darker background for the empty glass */
+            border-radius: 10px;
+            /* Pill shape */
+            margin-bottom: 2rem;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+            /* Inner shadow for depth */
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #5b108b, #a46edb, #5b108b);
+            background-size: 200% 100%;
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Smoother, slightly elastic transition */
+            border-radius: 10px;
+            position: relative;
+            animation: potionFlow 3s linear infinite;
+        }
+
+        /* Bubbles inside the potion */
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.4) 1px, transparent 1px),
+                radial-gradient(circle, rgba(255, 255, 255, 0.2) 2px, transparent 2px);
+            background-size: 20px 20px, 15px 15px;
+            background-position: 0 0, 10px 10px;
+            animation: bubbling 2s linear infinite;
+            opacity: 0.5;
+            mix-blend-mode: overlay;
+        }
+
+        @keyframes potionFlow {
+            0% {
+                background-position: 100% 0;
+            }
+
+            100% {
+                background-position: -100% 0;
+            }
+        }
+
+        @keyframes bubbling {
+            0% {
+                background-position: 0 0, 10px 10px;
+            }
+
+            100% {
+                background-position: -20px -20px, -5px -5px;
+                /* Move up and left */
+            }
+        }
+
+        /* Snarky Commentary Overlay Styles */
+        @keyframes breatheVignette {
+
+            0%,
+            100% {
+                background-color: rgba(10, 5, 20, 0.4);
+            }
+
+            50% {
+                background-color: rgba(5, 2, 10, 0.85);
+            }
+        }
+
+        #snarky-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 5, 20, 0.4);
+            box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(8px) grayscale(50%);
+            -webkit-backdrop-filter: blur(8px) grayscale(50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.5s ease-in-out;
+            /* Slower, more ghostly fade */
+        }
+
+        #snarky-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+            animation: breatheVignette 4s ease-in-out infinite;
+        }
+
+        #snarky-commentary {
+            font-family: 'Quotex', sans-serif;
+            font-style: italic;
+            font-size: 3.5rem;
+            color: #e2e8f0;
+            text-align: center;
+            max-width: 80%;
+            line-height: 1.2;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8), 0 0 20px rgba(164, 110, 219, 0.6);
+        }
+
+        /* Hover Glow Effect - INTENSIFIED */
+        /* Hover Effect - Rebuilt */
+        /* Hover Effect - Rebuilt & Simplified */
+        .answer-btn {
+            background-color: #374151;
+            /* bg-gray-700 */
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid transparent;
+            cursor: pointer !important;
+            position: relative;
+            z-index: 20;
+            /* Force above container */
+        }
+
+        .answer-btn:hover {
+            background-color: #5b108b !important;
+            /* Force Custom purple */
+            transform: scale(1.03) !important;
+            box-shadow: 0 0 20px rgba(164, 110, 219, 0.6) !important;
+            border-color: #a46edb !important;
+            z-index: 10;
+        }
+
+        /* --- NEW --- Active state for visual click feedback */
+        .answer-btn.clicked {
+            transform: scale(0.95) !important;
+            box-shadow: 0 0 5px rgba(164, 110, 219, 0.8) !important;
+            background-color: #490d70 !important;
+            /* darker purple */
+            transition: transform 0.1s ease, background-color 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        /* --- NEW --- Active state for visual click feedback */
+        .answer-btn:active,
+        .answer-btn.clicked {
+            transform: scale(0.95) !important;
+            box-shadow: 0 0 5px rgba(164, 110, 219, 0.8) !important;
+            background-color: #490d70 !important;
+            /* darker purple */
+            transition: transform 0.1s ease, background-color 0.1s ease, box-shadow 0.1s ease;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gray-900 text-gray-200 min-h-screen flex items-center justify-center p-4 transition-all duration-500 overflow-hidden">
+
+    <!-- Visual Enhancements -->
+    <!-- Visual Enhancements -->
 
     <video autoplay loop muted playsinline id="background-video">
         <source src="BGQuizzWed.mp4" type="video/mp4">
@@ -167,40 +477,65 @@
     </video>
 
     <video id="reveal-video" muted playsinline>
-        </video>
+    </video>
 
-    <div id="quiz-container" class="w-full max-w-2xl mx-auto relative z-10"> <div id="start-screen" class="text-center">
-            <h1 class="font-quotex text-5xl md:text-6xl font-bold mb-4 text-white opacity-0 animate-fade-in-up">Which Nevermore Outcast Are You?</h1>
-             <p class="text-xl text-gray-400 mb-10 opacity-0 animate-fade-in-up animation-delay-300 px-4">Your powers are a mirror of your inner self. Answer the questions to reveal the truth.</p>
-            
-            <button id="start-btn" class="bg-custom-purple hover:bg-custom-purple-dark text-white font-bold py-3 px-8 rounded-lg text-xl transition-transform transform hover:scale-105 shadow-lg opacity-0 animate-very-slow-fade-in animation-delay-1000">Begin the Diagnosis</button>
+    <div id="quiz-container" class="w-full max-w-2xl mx-auto relative z-10">
+        <div id="start-screen" class="text-center">
+            <h1 class="font-quotex text-5xl md:text-6xl font-bold mb-4 text-white opacity-0 animate-fade-in">Which
+                Nevermore Outcast Are You?</h1>
+            <p class="text-xl text-gray-400 mb-10 opacity-0 animate-fade-in animation-delay-300 px-4">Your powers are
+                a mirror of your inner self. Answer the questions to reveal the truth.</p>
+
+            <button id="start-btn"
+                class="bg-custom-purple hover:bg-custom-purple-dark text-white font-bold py-3 px-8 rounded-lg text-xl transition-transform transform hover:scale-105 shadow-lg opacity-0 animate-very-slow-fade-in animation-delay-1000">Begin
+                the Diagnosis</button>
         </div>
 
         <div id="quiz-screen" class="hidden">
-            <div id="question-card" class="question-card border border-gray-700 rounded-xl shadow-2xl p-6 md:p-8">
-                 <p id="question-counter" class="text-base text-custom-purple-light mb-2 font-semibold"></p>
-                 <h2 id="question-text" class="text-3xl font-bold mb-6 text-white"></h2>
+            <div id="question-card"
+                class="question-card border border-gray-700 rounded-xl shadow-2xl p-6 md:p-8 relative">
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <p id="question-counter" class="text-base text-custom-purple-light mb-2 font-semibold"></p>
+                <h2 id="question-text" class="text-3xl font-bold mb-6 text-white"></h2>
+
                 <div id="answer-buttons" class="grid grid-cols-1 gap-4">
-                    </div>
+                </div>
             </div>
         </div>
-        
+
+        <!-- NEW: Snarky Overlay -->
+        <div id="snarky-overlay">
+            <p id="snarky-commentary" class="font-quotex text-white shadow-lg"></p>
+        </div>
+
         <div id="tie-screen" class="hidden">
             <div class="tie-card border border-gray-700 rounded-xl shadow-2xl p-6 md:p-8 text-center">
-                 <h2 class="font-quotex text-4xl md:text-5xl font-bold mb-4 text-white">Your Affinity is Split</h2>
-                 <p class="text-xl text-gray-400 mb-8">Your answers point to multiple paths. Choose the one that calls to you.</p>
+                <h2 class="font-quotex text-4xl md:text-5xl font-bold mb-4 text-white">Your Affinity is Split</h2>
+                <p class="text-xl text-gray-400 mb-8">Your answers point to multiple paths. Choose the one that calls to
+                    you.</p>
                 <div id="tie-buttons" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Moon Loader Screen -->
+        <div id="loader-screen" class="hidden absolute inset-0 flex items-center justify-center z-50">
+            <div class="text-center">
+                <div class="moon-loader"></div>
+                <p class="font-quotex text-2xl text-white animate-pulse">Consulting visions...</p>
             </div>
         </div>
 
         <div id="result-screen" class="hidden opacity-0">
             <div class="result-card border border-gray-700 rounded-xl shadow-2xl p-6 md:p-8 text-center">
                 <p class="text-custom-purple-light font-semibold mb-2 text-lg">Your Outcast Profile:</p>
-                 <h2 id="result-title" class="font-quotex text-5xl md:text-6xl font-bold mb-4 text-white"></h2>
-                 <div id="result-icon" class="text-7xl my-6"></div>
-                 <p id="result-description" class="text-gray-300 text-lg md:text-xl mb-8 leading-relaxed"></p>
-                
+                <h2 id="result-title" class="font-quotex text-5xl md:text-6xl font-bold mb-4 text-white"></h2>
+                <div id="result-icon" class="text-7xl my-6"></div>
+                <p id="result-description" class="text-gray-300 text-lg md:text-xl mb-8 leading-relaxed"></p>
+
                 <div id="sub-result-container" class="mt-8 border-t border-gray-700 pt-8">
                     <p class="text-custom-purple-light font-semibold mb-2 text-lg">Your Secondary Affinity:</p>
                     <h3 id="sub-result-title" class="font-nocturne text-3xl font-bold text-white"></h3>
@@ -208,27 +543,35 @@
 
                 <div class="my-10">
                     <h3 class="text-2xl font-semibold text-custom-purple-light mb-4">Your Affinity Analysis</h3>
-                    <div class="w-full mx-auto h-72 md:h-96 flex justify-center items-center"> <canvas id="result-chart"></canvas>
+                    <div class="w-full mx-auto h-72 md:h-96 flex justify-center items-center"> <canvas
+                            id="result-chart"></canvas>
                     </div>
                 </div>
-                <button id="restart-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg text-xl transition-transform transform hover:scale-105 shadow-lg">Try Again</button>
+                <button id="restart-btn"
+                    class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg text-xl transition-transform transform hover:scale-105 shadow-lg">Try
+                    Again</button>
             </div>
         </div>
+    </div>
 
     </div>
-    
-    <div id="tooltip" class="hidden absolute bg-gray-800 text-white text-base rounded-lg p-3 max-w-xs z-50 pointer-events-none shadow-lg leading-relaxed"></div> <script>
+
+    <div id="tooltip"
+        class="hidden absolute bg-gray-800 text-white text-base rounded-lg p-3 max-w-xs z-50 pointer-events-none shadow-lg leading-relaxed">
+    </div>
+    <script>
         const startBtn = document.getElementById('start-btn');
         const restartBtn = document.getElementById('restart-btn');
         const startScreen = document.getElementById('start-screen');
         const quizScreen = document.getElementById('quiz-screen');
         const tieScreen = document.getElementById('tie-screen');
         const resultScreen = document.getElementById('result-screen');
-        
+
         const questionCounterEl = document.getElementById('question-counter');
         const questionTextEl = document.getElementById('question-text');
+        const snarkyCommentaryEl = document.getElementById('snarky-commentary');
         const answerButtonsEl = document.getElementById('answer-buttons');
-        
+
         const resultTitleEl = document.getElementById('result-title');
         const resultIconEl = document.getElementById('result-icon');
         const resultDescriptionEl = document.getElementById('result-description');
@@ -237,6 +580,33 @@
         const resultChartEl = document.getElementById('result-chart');
         const tooltip = document.getElementById('tooltip');
 
+        // --- NEW --- Round 2 Elements
+        const quizContainer = document.getElementById('quiz-container');
+        const progressFill = document.getElementById('progress-fill');
+        const loaderScreen = document.getElementById('loader-screen');
+
+        // --- NEW --- Typewriter Effect
+        let typewriterTimeout; // Global variable to store timeout ID
+
+        function typeWriter(element, text, speed = 30) {
+            // Clear any existing typewriter animation for this element
+            if (typewriterTimeout) clearTimeout(typewriterTimeout);
+
+            element.innerHTML = "";
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    typewriterTimeout = setTimeout(type, speed);
+                } else {
+                    element.classList.remove('typewriter-cursor'); // Remove cursor when done
+                }
+            }
+            element.classList.add('typewriter-cursor');
+            type();
+        }
+
         // Video elements
         const backgroundVideo = document.getElementById('background-video');
         const revealVideo = document.getElementById('reveal-video');
@@ -244,13 +614,24 @@
         let currentQuestionIndex = 0;
         let scores = {};
         let resultChart = null;
+        let snarkyCount = 0; // NEW: Track how many snarky comments have been shown
 
         const newPurpleColor = '#5b108b';
         const newPurpleHoverColor = '#490d70'; // Slightly darker for hover
         const newPurpleLightColor = '#a46edb'; // Lighter shade for text/accents
 
+        // --- NEW --- Snarky Comments Bank
+        const snarkyComments = [
+            "Are you trying to be mundane, or does it come naturally?",
+            "Your choices are... adequately disappointing.",
+            "I've seen corpses make faster decisions.",
+            "Fascinating. In a purely clinical sense, of course.",
+            "Please tell me you're not actually this predictable.",
+            "At this point, rolling dice might be more effective."
+        ];
+
         const questions = [
-             {
+            {
                 question: "What is your deepest feeling about the future?",
                 answers: [
                     { text: "A grim, inevitable outcome.", species: "Raven" },
@@ -411,9 +792,9 @@
                 ]
             }
         ];
-        
+
         const results = {
-             Raven: {
+            Raven: {
                 title: "Raven Psychic",
                 icon: "🐦‍⬛",
                 description: "You see the world for what it is: a landscape of dark truths and grim possibilities. Your visions are potent and often violent, a reflection of your cynical worldview. This gift is a heavy burden, isolating you and threatening your sanity without proper control. You walk a lonely path, guided by ancient spirits, your personality both the cause and consequence of your powerful, dark gift."
@@ -482,18 +863,19 @@
 
         function startQuiz() {
             currentQuestionIndex = 0;
+            snarkyCount = 0; // Reset snarky count
             scores = { Raven: 0, Dove: 0, Werewolf: 0, Siren: 0, Gorgon: 0, Vampire: 0, Hyde: 0, Shapeshifter: 0, Swarmer: 0, DaVinci: 0, Alpha: 0 };
             startScreen.classList.add('hidden');
             tieScreen.classList.add('hidden');
-            
+
             resultScreen.classList.add('hidden');
             resultScreen.classList.remove('animate-slow-fade-in');
-            resultScreen.classList.add('opacity-0'); 
-            
+            resultScreen.classList.add('opacity-0');
+
             resultTitleEl.classList.remove('animate-slow-glow');
-            
+
             quizScreen.classList.remove('hidden');
-            if(resultChart){
+            if (resultChart) {
                 resultChart.destroy();
             }
 
@@ -506,38 +888,123 @@
         }
 
         function showQuestion() {
+            if (currentQuestionIndex > 0) {
+                const card = document.getElementById('question-card');
+                card.classList.remove('animate-fade-in'); // Reset in case it's there
+                card.classList.add('animate-fade-out');
+
+                setTimeout(() => {
+                    updateQuestionContent();
+                    card.classList.remove('animate-fade-out');
+                    // Force opacity to 0 via class before adding fade-in to preventing snapping? 
+                    // The animate-fade-in starts at 0, so it should be fine.
+                    card.classList.add('animate-fade-in');
+                }, 500); // Wait for fade out
+            } else {
+                updateQuestionContent();
+            }
+        }
+
+        function updateQuestionContent() {
             resetState();
             const question = questions[currentQuestionIndex];
             questionCounterEl.innerText = `Question ${currentQuestionIndex + 1} / ${questions.length}`;
-            questionTextEl.innerText = question.question;
+
+            // --- NEW --- Update Progress Bar
+            const progress = ((currentQuestionIndex) / questions.length) * 100;
+            progressFill.style.width = `${progress}%`;
+
+            // Apply typewriter effect to question text
+            typeWriter(questionTextEl, question.question);
 
             // --- UPDATED --- Create a shuffled copy of the answers
             const shuffledAnswers = shuffleArray(question.answers);
 
             // --- UPDATED --- Loop over the shuffled answers
-            shuffledAnswers.forEach(answer => {
+            shuffledAnswers.forEach((answer, index) => {
                 const button = document.createElement('button');
                 button.innerText = answer.text;
-                 // --- UPDATED --- Increased font size, updated hover color, and changed hover:scale-102 to hover:scale-105
-                button.classList.add('bg-gray-700', 'hover:bg-custom-purple', 'text-white', 'font-semibold', 'py-3', 'px-4', 'rounded-lg', 'text-left', 'transition-all', 'duration-200', 'transform', 'hover:scale-105', 'text-lg'); 
-                button.addEventListener('click', () => selectAnswer(answer.species));
+                // Use new classes - ANIMATION RESTORED
+                button.className = "answer-btn w-full text-white font-semibold py-4 px-6 rounded-lg text-left text-lg shadow-md opacity-0 animate-fade-in";
+
+                // Add stagger delay
+                button.style.animationDelay = `${(index + 1) * 150 + 300}ms`;
+
+                button.addEventListener('click', function () { selectAnswer(answer.species, this); });
                 answerButtonsEl.appendChild(button);
             });
         }
-        
+
+        const snarkyOverlayEl = document.getElementById('snarky-overlay');
+
         function resetState() {
             while (answerButtonsEl.firstChild) {
                 answerButtonsEl.removeChild(answerButtonsEl.firstChild);
             }
         }
 
-        function selectAnswer(species) {
+        function selectAnswer(species, buttonElement) {
             scores[species]++;
+
+            // --- NEW --- Visual Click Feedback
+            buttonElement.classList.add('clicked');
+
+            // Disable all buttons to prevent multiple clicks
+            const buttons = answerButtonsEl.querySelectorAll('.answer-btn');
+            buttons.forEach(btn => btn.style.pointerEvents = 'none');
+
+            // Visually select the clicked button permanently
+            setTimeout(() => {
+                buttonElement.classList.remove('hover:bg-custom-purple-dark', 'hover:scale-105', 'clicked');
+                buttonElement.classList.add('bg-custom-purple', 'border-a46edb', 'shadow-[0_0_20px_rgba(164,110,219,0.6)]', 'scale-105');
+                buttonElement.style.transform = 'scale(1.03)';
+                buttonElement.style.boxShadow = '0 0 20px rgba(164, 110, 219, 0.6)';
+
+                // Hide the comment initially if it was showing
+                snarkyOverlayEl.classList.remove('show');
+                snarkyCommentaryEl.innerHTML = "";
+
+                // Decide if we pop a snarky comment (Max 3 times)
+                if (currentQuestionIndex > 0 && Math.random() < 0.35 && snarkyCount < 3) {
+                    snarkyCount++;
+                    setTimeout(() => {
+                        const randomComment = snarkyComments[Math.floor(Math.random() * snarkyComments.length)];
+                        snarkyOverlayEl.classList.add('show');
+
+                        // Start typing slightly after the fade starts
+                        setTimeout(() => {
+                            typeWriter(snarkyCommentaryEl, randomComment, 40);
+                        }, 150);
+                    }, 300);
+
+                    // Delay next question to allow reading
+                    setTimeout(() => {
+                        snarkyOverlayEl.classList.remove('show');
+                        setTimeout(() => {
+                            proceedToNextQuestion();
+                        }, 1500); // Slower fade out duration (matches CSS transition 1.5s)
+                    }, 4000); // Increased delay due to typing time
+                } else {
+                    // Short delay just for button feedback
+                    setTimeout(() => {
+                        proceedToNextQuestion();
+                    }, 250); // Reduced delay for snappier transition
+                }
+            }, 150); // Small delay to let the click animation finish
+        }
+
+        function proceedToNextQuestion() {
             currentQuestionIndex++;
             if (currentQuestionIndex < questions.length) {
                 showQuestion();
             } else {
-                showResult();
+                // --- NEW --- Show Loader before Result
+                quizScreen.classList.add('hidden');
+                loaderScreen.classList.remove('hidden');
+                setTimeout(() => {
+                    loaderScreen.classList.add('hidden');
+                    showResult();
+                }, 2500); // 2.5s loading time
             }
         }
 
@@ -556,20 +1023,20 @@
 
         function showTieScreen(tiedWinners, scoresArray) {
             const tieButtonsEl = document.getElementById('tie-buttons');
-            tieButtonsEl.innerHTML = ''; 
+            tieButtonsEl.innerHTML = '';
 
             tiedWinners.forEach(winner => {
                 const speciesKey = winner[0];
                 const resultData = results[speciesKey];
                 const button = document.createElement('button');
-                 // Updated hover color, increased font size
-                button.classList.add('bg-gray-700', 'hover:bg-custom-purple', 'text-white', 'font-semibold', 'py-4', 'px-4', 'rounded-lg', 'text-center', 'transition-all', 'duration-200', 'transform', 'hover:scale-105', 'text-lg'); 
-                
+                // Updated hover color, increased font size
+                button.classList.add('bg-gray-700', 'hover:bg-custom-purple', 'text-white', 'font-semibold', 'py-4', 'px-4', 'rounded-lg', 'text-center', 'transition-all', 'duration-200', 'transform', 'hover:scale-105', 'text-lg');
+
                 button.innerHTML = `
-                    <div class="text-5xl mb-2">${resultData.icon}</div> 
+                    <div class="text-5xl mb-2">${resultData.icon}</div>
                     <div class="font-quotex text-2xl">${resultData.title}</div>
                 `;
-                
+
                 button.addEventListener('click', () => {
                     displayFinalResult(speciesKey, scoresArray);
                 });
@@ -600,7 +1067,7 @@
             const resultData = results[chosenSpecies];
             resultTitleEl.innerText = resultData.title;
             resultTitleEl.classList.add('animate-slow-glow');
-            
+
             resultIconEl.innerText = resultData.icon;
             resultDescriptionEl.innerText = resultData.description;
 
@@ -619,19 +1086,19 @@
                 secondaryAffinities = remainingScores.filter(item => item[1] === secondPlaceScore);
             }
 
-            subResultTitleEl.innerHTML = ''; 
-            
+            subResultTitleEl.innerHTML = '';
+
             const finalSecondary = secondaryAffinities.filter(item => item[1] >= 3);
 
             if (finalSecondary.length > 0) {
                 finalSecondary.forEach((sub, index) => {
                     const subSpeciesKey = sub[0];
                     const subResultData = results[subSpeciesKey];
-                    
+
                     const span = document.createElement('span');
                     span.innerText = subResultData.title;
                     span.style.cursor = 'help';
-                     // Updated decoration color
+                    // Updated decoration color
                     span.classList.add('underline', 'decoration-dotted', 'decoration-custom-purple');
 
                     span.addEventListener('mousemove', (e) => {
@@ -653,7 +1120,7 @@
 
                 const subResultLabel = subResultContainer.querySelector('p');
                 subResultLabel.innerText = finalSecondary.length > 1 ? 'Your Secondary Affinities:' : 'Your Secondary Affinity:';
-                
+
                 subResultContainer.classList.remove('hidden');
             } else {
                 subResultContainer.classList.add('hidden');
@@ -661,11 +1128,14 @@
 
             quizScreen.classList.add('hidden');
             tieScreen.classList.add('hidden');
-            
-            resultScreen.classList.remove('opacity-0'); 
-            resultScreen.classList.add('animate-slow-fade-in'); 
-            resultScreen.classList.remove('hidden'); 
-            
+
+            resultScreen.classList.remove('hidden');
+            // Trigger Fade In
+            setTimeout(() => {
+                resultScreen.classList.remove('opacity-0');
+                resultScreen.classList.add('animate-slow-fade-in-up');
+            }, 100);
+
             createRadarChart();
         }
 
@@ -674,7 +1144,7 @@
             Chart.defaults.font.family = "'Typewriter Condensed', 'Inter', sans-serif";
             Chart.defaults.font.size = 14; // Increased default font size slightly
             const chartLabels = Object.keys(scores).map(species => results[species].title);
-            
+
             function wrapText(text, maxWidth) {
                 const words = text.split(' ');
                 let lines = [];
@@ -698,14 +1168,14 @@
                 datasets: [{
                     label: 'Your Species Affinity',
                     data: Object.values(scores),
-                     // Updated chart colors
+                    // Updated chart colors
                     backgroundColor: 'rgba(91, 16, 139, 0.2)', // New purple with alpha
-                    borderColor: newPurpleColor, 
+                    borderColor: newPurpleColor,
                     borderWidth: 2,
-                    pointBackgroundColor: newPurpleColor, 
+                    pointBackgroundColor: newPurpleColor,
                     pointBorderColor: '#fff',
                     pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: newPurpleColor 
+                    pointHoverBorderColor: newPurpleColor
                 }]
             };
 
@@ -716,7 +1186,7 @@
                     maintainAspectRatio: false,
                     scales: {
                         r: {
-                            min: -1, 
+                            min: -1,
                             angleLines: {
                                 color: 'rgba(255, 255, 255, 0.2)'
                             },
@@ -733,7 +1203,7 @@
                                 color: '#94a3b8',
                                 backdropColor: 'rgba(0,0,0,0.5)',
                                 stepSize: 1,
-                                callback: function(value, index, values) {
+                                callback: function (value, index, values) {
                                     if (value === -1) return ''; // Hide -1 labeld
                                     return value;
                                 },
@@ -750,14 +1220,14 @@
                         tooltip: {
                             enabled: true,
                             backgroundColor: 'rgba(31, 41, 55, 0.9)',
-                             // Apply custom fonts to tooltips, increased size
+                            // Apply custom fonts to tooltips, increased size
                             titleFont: { size: 16, family: "'Quotex', 'Spectral', serif" },
                             bodyFont: { size: 14, family: "'Typewriter Condensed', 'Inter', sans-serif" },
                             padding: 10,
                             cornerRadius: 4,
                             callbacks: {
                                 label: () => '',
-                                afterBody: function(context) {
+                                afterBody: function (context) {
                                     const speciesKey = Object.keys(scores)[context[0].dataIndex];
                                     const description = results[speciesKey].description;
                                     return wrapText(description, 40);
@@ -780,4 +1250,7 @@
             revealVideo.src = ''; // Clear source to free up memory
         });
 
-    </script></body></html>
+    </script>
+</body>
+
+</html>
