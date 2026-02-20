@@ -7,6 +7,7 @@
     <title>Which Outcast Species Are You?</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="fonts.css">
@@ -547,9 +548,14 @@
                             id="result-chart"></canvas>
                     </div>
                 </div>
-                <button id="restart-btn"
-                    class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg text-xl transition-transform transform hover:scale-105 shadow-lg">Try
-                    Again</button>
+                <div class="flex justify-center gap-4 mt-6" data-html2canvas-ignore="true">
+                    <button id="restart-btn"
+                        class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg text-xl transition-transform transform hover:scale-105 shadow-lg">Try
+                        Again</button>
+                    <button id="export-btn"
+                        class="bg-custom-purple hover:bg-custom-purple-dark text-white font-bold py-3 px-8 rounded-lg text-xl transition-transform transform hover:scale-105 shadow-lg">Export
+                        Card</button>
+                </div>
             </div>
         </div>
     </div>
@@ -588,7 +594,7 @@
         // --- NEW --- Typewriter Effect
         let typewriterTimeout; // Global variable to store timeout ID
 
-        function typeWriter(element, text, speed = 30) {
+        function typeWriter(element, text, speed = 30, pauseOnPunctuation = false) {
             // Clear any existing typewriter animation for this element
             if (typewriterTimeout) clearTimeout(typewriterTimeout);
 
@@ -596,9 +602,16 @@
             let i = 0;
             function type() {
                 if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
+                    const char = text.charAt(i);
+                    element.innerHTML += char;
                     i++;
-                    typewriterTimeout = setTimeout(type, speed);
+
+                    let currentSpeed = speed;
+                    if (pauseOnPunctuation && (char === '.' || char === ',')) {
+                        currentSpeed += 400; // Slight pause
+                    }
+
+                    typewriterTimeout = setTimeout(type, currentSpeed);
                 } else {
                     element.classList.remove('typewriter-cursor'); // Remove cursor when done
                 }
@@ -615,6 +628,7 @@
         let scores = {};
         let resultChart = null;
         let snarkyCount = 0; // NEW: Track how many snarky comments have been shown
+        let availableComments = []; // Prevent duplicate snarky comments
 
         const newPurpleColor = '#5b108b';
         const newPurpleHoverColor = '#490d70'; // Slightly darker for hover
@@ -864,6 +878,7 @@
         function startQuiz() {
             currentQuestionIndex = 0;
             snarkyCount = 0; // Reset snarky count
+            availableComments = [...snarkyComments];
             scores = { Raven: 0, Dove: 0, Werewolf: 0, Siren: 0, Gorgon: 0, Vampire: 0, Hyde: 0, Shapeshifter: 0, Swarmer: 0, DaVinci: 0, Alpha: 0 };
             startScreen.classList.add('hidden');
             tieScreen.classList.add('hidden');
@@ -913,6 +928,13 @@
             // --- NEW --- Update Progress Bar
             const progress = ((currentQuestionIndex) / questions.length) * 100;
             progressFill.style.width = `${progress}%`;
+
+            // Pre-calculate and set the height to prevent sudden expansion
+            questionTextEl.style.minHeight = 'auto'; // Reset first
+            questionTextEl.innerHTML = question.question;
+            const targetHeight = questionTextEl.offsetHeight;
+            questionTextEl.style.minHeight = targetHeight + 'px';
+            questionTextEl.innerHTML = '';
 
             // Apply typewriter effect to question text
             typeWriter(questionTextEl, question.question);
@@ -968,12 +990,13 @@
                 if (currentQuestionIndex > 0 && Math.random() < 0.35 && snarkyCount < 3) {
                     snarkyCount++;
                     setTimeout(() => {
-                        const randomComment = snarkyComments[Math.floor(Math.random() * snarkyComments.length)];
+                        const randomIndex = Math.floor(Math.random() * availableComments.length);
+                        const randomComment = availableComments.splice(randomIndex, 1)[0] || snarkyComments[0];
                         snarkyOverlayEl.classList.add('show');
 
                         // Start typing slightly after the fade starts
                         setTimeout(() => {
-                            typeWriter(snarkyCommentaryEl, randomComment, 40);
+                            typeWriter(snarkyCommentaryEl, randomComment, 40, true);
                         }, 150);
                     }, 300);
 
@@ -1248,6 +1271,27 @@
         revealVideo.addEventListener('ended', () => {
             revealVideo.style.display = 'none'; // Hide it
             revealVideo.src = ''; // Clear source to free up memory
+        });
+
+        const exportBtn = document.getElementById('export-btn');
+        exportBtn.addEventListener('click', () => {
+            const card = document.querySelector('.result-card');
+            const originalTransform = card.style.transform;
+            card.style.transform = 'none'; // reset transform if any for reliable capture
+
+            // Adding a small delay to ensure rendering is complete
+            setTimeout(() => {
+                html2canvas(card, {
+                    backgroundColor: '#1f2937', // Match the card background if needed
+                    scale: 2 // Higher resolution
+                }).then(canvas => {
+                    card.style.transform = originalTransform;
+                    const link = document.createElement('a');
+                    link.download = 'My_Outcast_Profile.jpg';
+                    link.href = canvas.toDataURL('image/jpeg', 0.9);
+                    link.click();
+                });
+            }, 100);
         });
 
     </script>
