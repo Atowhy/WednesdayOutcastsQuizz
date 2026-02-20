@@ -628,6 +628,7 @@
         let scores = {};
         let resultChart = null;
         let snarkyCount = 0; // NEW: Track how many snarky comments have been shown
+        let lastSnarkyIndex = -3; // Track index to ensure gap
         let availableComments = []; // Prevent duplicate snarky comments
 
         const newPurpleColor = '#5b108b';
@@ -638,7 +639,7 @@
         const snarkyComments = [
             "Are you trying to be mundane, or does it come naturally?",
             "Your choices are... adequately disappointing.",
-            "I've seen corpses make faster decisions.",
+            "I've seen corpses make faster decisions...",
             "Fascinating. In a purely clinical sense, of course.",
             "Please tell me you're not actually this predictable.",
             "At this point, rolling dice might be more effective."
@@ -878,6 +879,7 @@
         function startQuiz() {
             currentQuestionIndex = 0;
             snarkyCount = 0; // Reset snarky count
+            lastSnarkyIndex = -3; // Initialize so it can trigger early on
             availableComments = [...snarkyComments];
             scores = { Raven: 0, Dove: 0, Werewolf: 0, Siren: 0, Gorgon: 0, Vampire: 0, Hyde: 0, Shapeshifter: 0, Swarmer: 0, DaVinci: 0, Alpha: 0 };
             startScreen.classList.add('hidden');
@@ -986,9 +988,14 @@
                 snarkyOverlayEl.classList.remove('show');
                 snarkyCommentaryEl.innerHTML = "";
 
-                // Decide if we pop a snarky comment (Max 3 times)
-                if (currentQuestionIndex > 0 && Math.random() < 0.35 && snarkyCount < 3) {
+                // Decide if we pop a snarky comment (Max 3 times, at least 2 questions apart)
+                if (currentQuestionIndex > 0 &&
+                    currentQuestionIndex - lastSnarkyIndex >= 3 &&
+                    Math.random() < 0.4 &&
+                    snarkyCount < 3) {
+
                     snarkyCount++;
+                    lastSnarkyIndex = currentQuestionIndex;
                     setTimeout(() => {
                         const randomIndex = Math.floor(Math.random() * availableComments.length);
                         const randomComment = availableComments.splice(randomIndex, 1)[0] || snarkyComments[0];
